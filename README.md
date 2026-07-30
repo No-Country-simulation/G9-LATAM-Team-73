@@ -76,7 +76,7 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
 * **Frameworks/Backend**: Spring Boot (Framework de Java).
 * **Librerías**: Pandas, Scikit-Learn.
 * **Técnicas de Machine Learning**: TF-IDF(Vectorización de texto).
-* **Herramientas**: Excel, Google Colab, OCI, Docker, Postman.
+* **Herramientas**: Excel, Google Colab, OCI, Docker, Postman, Trello.
 
 <h1></h1>
 
