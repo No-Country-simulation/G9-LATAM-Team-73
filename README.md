@@ -30,13 +30,51 @@ La solución debe recibir textos técnicos (por ejemplo: descripciones de artíc
 
 <h3> Arquitectura del proyecto </h3>
 
+La arquitectura del proyecto sigue un flujo descendente:
+Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object Storage, la API REST lo consume para generar predicciones, y la UI permite al usuario interactuar con el sistema.
+
+```bash
++---------------------------+
+|       Data Science        |
+|  EDA → Limpieza → Modelo  |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|      Modelo ONNX/Pkl      |
+|   (generado por DS)       |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|      OCI Object Storage   |
+|   (modelo.onnx almacenado)|
++-------------+-------------+
+              |
+              v
++---------------------------+
+|         API REST          |
+|      (FastAPI/Flask)      |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|        Interfaz UI        |
+|  (HTML/JS o Streamlit)    |
++-------------+-------------+
+              |
+              v
++---------------------------+
+|         Usuario           |
++---------------------------+
+```
 <h1></h1>
 
 <h3> Herramientas utilizadas </h3>
 
-* **Lenguajes**: Python, Java.
+* **Lenguajes**: Python, Java, Spring boot, postman.
 * **Librerías**: Pandas, Scikit-Learn, TF-IDF.
-* **Herramientas**: Excel, Colab, OCI.
+* **Herramientas**: Excel, Colab, OCI, Docker.
 
 <h1></h1>
 
@@ -90,7 +128,7 @@ G9-LATAM-Team-73/
 
 <h1></h1>
 
-<h3> despliegue en OCI </h3>
+<h3> Despliegue en OCI </h3>
 
 <h1></h1>
 
