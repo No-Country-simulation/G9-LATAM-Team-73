@@ -72,7 +72,7 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
 
 <h3> Herramientas utilizadas </h3>
 
-* **Lenguajes**: Python, Java, Spring boot, postman.
+* **Lenguajes**: Python, Java, Spring boot, Postman.
 * **Librerías**: Pandas, Scikit-Learn, TF-IDF.
 * **Herramientas**: Excel, Colab, OCI, Docker.
 
