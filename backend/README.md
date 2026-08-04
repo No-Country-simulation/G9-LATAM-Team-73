@@ -1,29 +1,64 @@
 # backend
 
-Proyecto Spring Boot con la infraestructura, la base de datos y el empaquetado en Docker del backend de TechMind (G9-LATAM-Team-73).
+Proyecto Spring Boot con la infraestructura, la base de datos, el empaquetado en Docker y la capa de IA/ONNX del backend de TechMind (G9-LATAM-Team-73).
 
 ## Stack
 
 - Java 21
 - Spring Boot 3.3.4 (`spring-boot-starter-data-jpa`, `spring-boot-starter-web`, `spring-boot-starter-validation`)
 - PostgreSQL (driver `org.postgresql:postgresql`)
+- ONNX Runtime (`com.microsoft.onnxruntime:onnxruntime`)
+- OCI Language SDK (`oci-java-sdk-ailanguage`) para traducción EN → ES
 - Lombok
 
 ## Estructura del proyecto
 
 ```
 src/main/java/com/techmind/backend/
-├── BackendApplication.java   # punto de entrada de Spring Boot
+├── BackendApplication.java
+├── config/
+│   ├── MlConfig.java
+│   ├── MlProperties.java
+│   └── OciLanguageProperties.java
 ├── model/
-│   └── ContentEntity.java    # entidad JPA mapeada a la tabla "content"
-└── repository/
-    └── ContentRepository.java # consultas por categoría e histórico
+│   └── ContentEntity.java
+├── repository/
+│   └── ContentRepository.java
+├── ml/                          # Dev 2 – IA / ONNX
+│   ├── TextPreprocessor.java
+│   ├── KeywordExtractor.java
+│   ├── OnnxModelService.java
+│   ├── PredictionResult.java
+│   └── ContentAnalysisService.java
+└── translation/                 # Dev 2 – EN → ES
+    ├── TranslationService.java
+    ├── TranslationResult.java
+    ├── LanguageDetector.java
+    ├── LocalTranslationService.java
+    └── OciLanguageTranslationService.java
 ```
 
 ### Qué hace cada pieza
 
 - **`ContentEntity`**: entidad JPA. Campos: `id`, `title`, `originalText`, `translatedText`, `category`, `probability`, `sourceLanguage`, `processedAt`.
-- **`ContentRepository`**: extiende `JpaRepository<ContentEntity, Long>`. Agrega `findByCategory`, `findAllByOrderByProcessedAtDesc` y `findByProcessedAtBetweenOrderByProcessedAtDesc` para las consultas por categoría e histórico.
+- **`ContentRepository`**: consultas por categoría e histórico.
+- **`TextPreprocessor`**: limpia texto igual que el notebook (`limpiar_texto`): minúsculas, sin puntuación/números, espacios colapsados.
+- **`OnnxModelService`**: carga `model/techmind_classifier.onnx` y predice categoría + probabilidad; si el `.onnx` aún no está, usa clasificador heurístico (`techmind.ml.fallback-enabled=true`).
+- **`KeywordExtractor`**: genera tags técnicos (`informacion_adicional`).
+- **`ContentAnalysisService`**: orquesta traducción + inferencia (listo para que Dev 3 lo conecte al controller).
+- **`TranslationService`**: detecta idioma; con OCI habilitado traduce EN → ES; en local deja el texto original.
+
+## Modelo ONNX
+
+Colocar el archivo exportado por Ciencia de Datos en:
+
+```
+src/main/resources/model/techmind_classifier.onnx
+```
+
+Expectativa del notebook: `Pipeline(TfidfVectorizer + LogisticRegression)` convertido con `skl2onnx` (`StringTensorType`), de modo que Java envíe el texto limpio directamente.
+
+Metadatos de clases: `src/main/resources/model/labels.json`.
 
 ## Base de datos
 
@@ -31,9 +66,18 @@ PostgreSQL
 
 ## Configuración
 
-- **`application.properties`**: perfil por defecto, apunta a `jdbc:postgresql://localhost:5432/techmind` (para correr contra un Postgres local).
-- **`application-docker.properties`**: perfil `docker`, lee la conexión de las variables de entorno `DB_URL`, `DB_USERNAME`, `DB_PASSWORD` (las inyecta `docker-compose.yml`). El mismo esquema de variables sirve como base para el despliegue en OCI Compute.
-- **`.env.example`**: variables que usa `docker-compose.yml` (`POSTGRES_DB`, `POSTGRES_USER`, `POSTGRES_PASSWORD`, `SERVER_PORT`). Copiarlo a `.env` y ajustar valores antes de levantar los contenedores.
+- **`application.properties`**: perfil por defecto + flags ML/OCI.
+- **`application-docker.properties`**: perfil `docker`, lee `DB_*` y `TECHMIND_*`.
+- **`.env.example`**: variables para `docker-compose.yml`.
+
+### Traducción OCI Language
+
+```properties
+techmind.oci.language.enabled=true
+techmind.oci.language.compartment-id=ocid1.compartment.oc1..xxx
+techmind.oci.language.config-file=~/.oci/config
+techmind.oci.language.profile=DEFAULT
+```
 
 ## Cómo correr el proyecto
 
@@ -51,9 +95,15 @@ docker compose up --build
 
 La API queda en `http://localhost:8080`.
 
+## Pruebas (Dev 2)
+
+```bash
+./mvnw test
+```
+
+Cubre preprocesamiento, extracción de tags, inferencia (fallback), detección de idioma y el orquestador con mocks.
+
 ## Docker
 
-- **`Dockerfile`**: build multi-stage. Primera etapa compila con Maven sobre `eclipse-temurin-21`; segunda etapa corre el jar sobre `eclipse-temurin:21-jre-alpine` (imagen final liviana).
-- **`docker-compose.yml`**: dos servicios.
-  - `db`: Postgres 16, con volumen nombrado `techmind_pgdata` para persistir los datos entre reinicios.
-  - `api`: construye la imagen del `Dockerfile`, espera a que `db` esté saludable (`healthcheck`) y se conecta con el perfil `docker`.
+- **`Dockerfile`**: build multi-stage. Primera etapa compila con Maven sobre `eclipse-temurin-21`; segunda etapa corre el jar sobre `eclipse-temurin:21-jre-alpine`.
+- **`docker-compose.yml`**: servicios `db` (Postgres 16) y `api` (perfil `docker`).
