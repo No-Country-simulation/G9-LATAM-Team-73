@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Clasificador de Contenido Técnico</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!--Botón para abrir y cerrar menú -->
+    <button id="toggleMenu" class="toggle-btn">Menú</button> 
+
+    <!-- Menú lateral izquierdo -->
+    <div id="sidebar" class="sidebar">
+        <h2>Menú</h2>
+        <ul>
+            <li onclick="mostrarSeccion('descripcion')">Descripción del proyecto</li>
+            <li onclick="mostrarSeccion('integrantes')">Integrantes</li>
+            <li onclick="mostrarSeccion('herramientas')">Herramientas utilizadas</li>
+        </ul>
+    <!-- Aquí aparecerá el contenido dinámico -->
+    <div id="menuContenido" class="menu-contenido"></div>
+    </div>
+
+
+    <div class="container">
+        <h1>Hackathon ONE - Proyecto G9</h1>
+        <h2>Equipo 73</h2>
+        <p class="subtitle">🧠 TechMind - Organización Inteligente del Conocimiento Técnico </p>
+        <p class="subtitle">Detecta categoría, probabilidad y palabras clave </p>
+
+        <input id="titulo" type="text" placeholder="Escribe aquí el Título..." />
+
+        <textarea id="texto" placeholder="Escribe aquí la descripción o contenido técnico..."></textarea>
+
+        <button id="btnEnviar">Clasificar</button>
+
+        <div id="resultado" class="resultado oculto">
+            <h2>Resultado</h2>
+            <p><strong>Categoría:</strong> <span id="categoria"></span></p>
+            <p><strong>Probabilidad:</strong> <span id="probabilidad"></span></p>
+
+            <h3>Información adicional</h3>
+            <ul id="infoAdicional"></ul>
+        </div>
+    </div>
+
+<!-- Contenido del Menú -->
+    <div id="descripcion" class="panel oculto">
+        <h2>Descripción del proyecto</h2>
+        <p>
+            Se requiere crear una solución que permita la organización inteligente de contenido técnico, facilitando su clasificación,
+            consulta y reutilización.<br> La solución debe recibir textos técnicos (por ejemplo: descripciones de artículos, documentación,
+            anotaciones de estudio, contenidos de cursos, tutoriales o materiales de referencia) y utilizar técnicas de Ciencia de Datos
+            para identificar información relevante sobre ese contenido.
+        </p>
+    </div>
+
+    <div id="integrantes" class="panel oculto">
+        <h2>Integrantes</h2>
+        <ul>
+            <li>Jocelyn Gudiño - <b>Project Manager</b></li>
+            <li>Jonathan Gutiérrez - <b>Data Analyst</b></li>
+            <li>Miguel Venegas - <b>Data Scientist</b></li>
+            <li>Luiggi Juarez - <b>Data Analyst</b></li>
+            <li>Javier Lujan - <b>Backend Developer</b></li>
+            <li>Manuel Jaliffe - <b>Backend Developer</b></li>
+            <li>Camilo González - <b>Backend Developer</b></li>
+        </ul>
+    </div>
+
+    <div id="herramientas" class="panel oculto">
+        <h2>Herramientas utilizadas</h2>
+        <ul>
+            <li><b>Lenguajes:</b> Python, Java, HTML, CSS, JavaScript</li>
+            <li><b>Frameworks/Backend:</b> Spring Boot (Framework de Java)</li>
+            <li><b>Librerías:</b> Pandas, Scikit-Learn</li>
+            <li><b>Técnicas de Machine Learning:</b> TF-IDF(Vectorización de texto)</li>
+            <li><b>Herramientas:</b> Excel, Google Colab, OCI, Docker, Postman, Trello</li>
+        </ul>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
+
