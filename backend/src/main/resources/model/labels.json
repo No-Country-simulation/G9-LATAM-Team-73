@@ -1,0 +1,13 @@
+{
+  "categories": [
+    "backend",
+    "frontend",
+    "full stack",
+    "data science",
+    "devops",
+    "mobile"
+  ],
+  "input_name": "input",
+  "label_output_name": "output_label",
+  "probability_output_name": "output_probability"
+}
