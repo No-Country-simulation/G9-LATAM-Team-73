@@ -9,7 +9,9 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
     }
 
     try {
-        const response = await fetch("COLOCAR ENDPOINT AQUI", {
+        const apiUrl = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8080";
+
+        const response = await fetch(`${apiUrl}/contenido`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -30,7 +32,7 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
         const lista = document.getElementById("infoAdicional");
         lista.innerHTML = "";
 
-        data.informacion_adicional.forEach(item => {
+        data.informacionAdicional.forEach(item => {
             const li = document.createElement("li");
             li.textContent = item;
             lista.appendChild(li);
