@@ -1,0 +1,29 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout>
+	<div class="container">
+		<h1>Hackathon ONE - Proyecto G9</h1>
+		<h2>Equipo 73</h2>
+		<p class="subtitle">🧠 TechMind - Organización Inteligente del Conocimiento Técnico </p>
+		<p class="subtitle">Detecta categoría, probabilidad y palabras clave </p>
+
+		<input id="titulo" type="text" placeholder="Escribe aquí el Título..." />
+
+		<textarea id="texto" placeholder="Escribe aquí la descripción o contenido técnico..."></textarea>
+
+		<button id="btnEnviar">Clasificar</button>
+
+		<div id="resultado" class="resultado oculto">
+			<h2>Resultado</h2>
+			<p><strong>Categoría:</strong> <span id="categoria"></span></p>
+			<p><strong>Probabilidad:</strong> <span id="probabilidad"></span></p>
+
+			<h3>Información adicional</h3>
+			<ul id="infoAdicional"></ul>
+		</div>
+	</div>
+
+	<script src="../scripts/main.js"></script>
+</Layout>

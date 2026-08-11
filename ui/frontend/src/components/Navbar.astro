@@ -1,0 +1,26 @@
+---
+const links = [
+	{ href: '/', label: 'Inicio' },
+	{ href: '/descripcion', label: 'Descripción del proyecto' },
+	{ href: '/integrantes', label: 'Integrantes' },
+	{ href: '/herramientas', label: 'Herramientas utilizadas' },
+];
+---
+
+<nav class="navbar">
+	<div class="navbar-inner">
+		<a href="/" class="navbar-brand">Hackathon ONE - Proyecto G9</a>
+
+		<button id="navToggle" class="navbar-toggle" aria-label="Abrir menú" aria-expanded="false">
+			<span></span>
+			<span></span>
+			<span></span>
+		</button>
+
+		<ul id="navLinks" class="navbar-links">
+			{links.map((link) => (
+				<li><a href={link.href}>{link.label}</a></li>
+			))}
+		</ul>
+	</div>
+</nav>
