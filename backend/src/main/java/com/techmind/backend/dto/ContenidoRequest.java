@@ -20,8 +20,8 @@ public class ContenidoRequest {
     @Size(max = 255, message = "El campo 'titulo' no puede superar 255 caracteres")
     private String titulo;
 
-    @NotBlank(message = "El campo 'texto' es obligatorio y no puede estar vacio")
-    @Size(min = 10, max = 5000, message = "El campo 'texto' debe tener entre 10 y 5000 caracteres")
+    @NotBlank(message = "El campo 'descripcion' es obligatorio y no puede estar vacio")
+    @Size(min = 10, max = 5000, message = "El campo 'descripcion' debe tener entre 10 y 5000 caracteres")
     private String texto;
 
     public ContenidoRequest() {

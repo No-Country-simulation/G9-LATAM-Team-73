@@ -37,10 +37,38 @@ h2 {
     margin-bottom: 20px;
 }
 
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #333;
+}
+
+.required {
+    color: #d32f2f;
+    margin-left: 2px;
+}
+
+.form-error {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 0 15px;
+    padding: 12px 14px;
+    background: #fdecea;
+    border: 1px solid #f5c2c0;
+    border-radius: 8px;
+    color: #b3261e;
+    font-size: 14px;
+}
+
 input[type="text"] {
     width: 100%;
     padding: 12px;
-    margin-bottom: 15px;
     border-radius: 8px;
     border: 1px solid #ccc;
     font-size: 16px;

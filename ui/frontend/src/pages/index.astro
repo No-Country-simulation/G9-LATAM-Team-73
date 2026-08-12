@@ -9,9 +9,17 @@ import Layout from '../layouts/Layout.astro';
 		<p class="subtitle">🧠 TechMind - Organización Inteligente del Conocimiento Técnico </p>
 		<p class="subtitle">Detecta categoría, probabilidad y palabras clave </p>
 
-		<input id="titulo" type="text" placeholder="Escribe aquí el Título..." />
+		<div class="form-group">
+			<label for="titulo">Título <span class="required">*</span></label>
+			<input id="titulo" type="text" />
+		</div>
 
-		<textarea id="texto" placeholder="Escribe aquí la descripción o contenido técnico..."></textarea>
+		<div class="form-group">
+			<label for="texto">Descripción <span class="required">*</span></label>
+			<textarea id="texto"></textarea>
+		</div>
+
+		<p id="formError" class="form-error oculto" role="alert"></p>
 
 		<button id="btnEnviar">Clasificar</button>
 
