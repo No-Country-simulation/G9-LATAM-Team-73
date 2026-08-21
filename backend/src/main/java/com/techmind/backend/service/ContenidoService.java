@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * FASE 2 - Implementacion real de ContenidoProcessingService.
@@ -52,10 +53,12 @@ public class ContenidoService implements ContenidoProcessingService {
 
         guardarHistorial(titulo, analizado);
 
+        boolean indeterminado = "Indeterminado".equalsIgnoreCase(analizado.category());
+
         return new ContenidoResponse(
                 analizado.category(),
                 redondear(analizado.probability()),
-                analizado.tags()
+                indeterminado ? List.of() : analizado.tags()
         );
     }
 
