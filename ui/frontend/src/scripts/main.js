@@ -34,7 +34,7 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
     ocultarError();
 
     try {
-        const apiUrl = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8080";
+        const apiUrl = import.meta.env.PUBLIC_API_URL ?? "http://localhost:8081";
 
         const response = await fetch(`${apiUrl}/contenido`, {
             method: "POST",

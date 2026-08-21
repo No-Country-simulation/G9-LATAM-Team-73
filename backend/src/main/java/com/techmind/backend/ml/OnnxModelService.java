@@ -166,9 +166,19 @@ public class OnnxModelService {
                 }
             }
 
+            String finalCategory = normalizeCategory(categoryRaw);
+            double finalProb = categoryProb;
+
+            // Opción 1: Si no se identificaron palabras clave técnicas (texto fuera de dominio/ambiguo)
+            // o si la probabilidad devuelta es menor al umbral (0.33), asignamos "Indeterminado".
+            if (extractedTags.isEmpty() || finalProb < 0.33) {
+                finalCategory = "Indeterminado";
+                finalProb = Math.min(finalProb, 0.20);
+            }
+
             return new PredictionResult(
-                    normalizeCategory(categoryRaw),
-                    categoryProb,
+                    finalCategory,
+                    finalProb,
                     finalTags,
                     "onnx"
             );
@@ -195,12 +205,13 @@ public class OnnxModelService {
 
         Map.Entry<String, Double> best = scores.entrySet().stream()
                 .max(Comparator.comparingDouble(Map.Entry::getValue))
-                .orElse(Map.entry("backend", 0.35));
+                .orElse(Map.entry("backend", 0.0));
 
         double raw = best.getValue();
-        double probability = raw <= 0
-                ? 0.35
-                : Math.min(0.99, 0.55 + (raw / 10.0));
+        if (raw <= 0 || tags.isEmpty()) {
+            return new PredictionResult("Indeterminado", 0.20, tags, "fallback");
+        }
+        double probability = Math.min(0.99, 0.55 + (raw / 10.0));
 
         return new PredictionResult(normalizeCategory(best.getKey()), probability, tags, "fallback");
     }
@@ -243,19 +254,25 @@ public class OnnxModelService {
             Object value = entry.getValue().getValue();
             if (value instanceof List<?> list && !list.isEmpty()) {
                 Object first = list.get(0);
+                Map<?, ?> m = null;
                 if (first instanceof OnnxMap map) {
                     try {
                         Object mapVal = map.getValue();
-                        if (mapVal instanceof Map<?, ?> m) {
-                            Object probObj = m.get(labelId);
-                            if (probObj == null) {
-                                probObj = m.get(String.valueOf(labelId));
-                            }
-                            if (probObj instanceof Number number) {
-                                return clamp(number.doubleValue());
-                            }
+                        if (mapVal instanceof Map<?, ?> innerMap) {
+                            m = innerMap;
                         }
                     } catch (OrtException ignored) {
+                    }
+                } else if (first instanceof Map<?, ?> rawMap) {
+                    m = rawMap;
+                }
+                if (m != null) {
+                    Object probObj = m.get(labelId);
+                    if (probObj == null) {
+                        probObj = m.get(String.valueOf(labelId));
+                    }
+                    if (probObj instanceof Number number) {
+                        return clamp(number.doubleValue());
                     }
                 }
             } else if (value instanceof float[][] matrix && matrix.length > 0) {
