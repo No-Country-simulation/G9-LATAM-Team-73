@@ -31,7 +31,7 @@ La solución debe recibir textos técnicos (por ejemplo: descripciones de artíc
 <h3> Arquitectura del proyecto </h3>
 
 La arquitectura del proyecto sigue un flujo descendente:
-Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object Storage, la API REST lo consume para generar predicciones, y la UI permite al usuario interactuar con el sistema.
+Data Science prepara y entrena el modelo, el modelo se almacena en Railway Cloud, la API REST lo consume para generar predicciones, y la UI permite al usuario interactuar con el sistema.
 
 ```bash
 +---------------------------+
@@ -47,7 +47,7 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
               |
               v
 +---------------------------+
-|      OCI Object Storage   |
+|      Railway Cloud   |
 |   (modelo.onnx almacenado)|
 +-------------+-------------+
               |
@@ -76,7 +76,7 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
 * **Frameworks/Backend**: Spring Boot (Framework de Java).
 * **Librerías**: Pandas, Scikit-Learn.
 * **Técnicas de Machine Learning**: TF-IDF(Vectorización de texto).
-* **Herramientas**: Excel, Google Colab, OCI, Docker, Postman, Trello.
+* **Herramientas**: Excel, Google Colab, Railway Cloud, Docker, Postman, Trello.
 
 <h1></h1>
 
@@ -113,7 +113,7 @@ G9-LATAM-Team-73/
 │   ├── script.js          # Lógica del frontend (nombre por actualizar)
 │   └── styles.css         # Estilos (nombre por actualizar)
 │
-├── oci/
+├── railway/
 │   ├── architecture.png   # Diagrama de arquitectura (nombre por actualizar)
 │   └── deployment.md      # Guía de despliegue en OCI (nombre por actualizar)
 │
