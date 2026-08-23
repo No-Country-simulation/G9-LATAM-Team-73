@@ -1,39 +1,44 @@
-# G9-LATAM-Team-73
+﻿# G9-LATAM-Team-73
 
 <div align="center">
-<h1> ✨✨✨ TechMind ✨✨✨ </h1>
-<h2> ✨✨✨ Organización Inteligente del Conocimiento Técnico ✨✨✨ </h2>
+<h1>✨✨✨ TechMind ✨✨✨</h1>
+<h2>✨✨✨ Organización Inteligente del Conocimiento Técnico ✨✨✨</h2>
 </div>
 
-![Badge en Desarollo](https://img.shields.io/badge/ENTREGA-%2008/2026-pink)
+![Badge en Desarrollo](https://img.shields.io/badge/ENTREGA-%2008/2026-pink)
 
-<h3> Integrantes </h3>
+---
 
-*	Jocelyn Gudiño - Project Manager
-*	Miguel Venegas - Data Scientist
-*	Jonathan Gutiérrez - Data Analyst
-*	Luiggi Juarez - Data Analyst
-*	Manuel Jaliffe - Backend Developer
-*	Camilo González - Backend Developer
-*	Javier Lujan - Backend Developer
+## 👥 Integrantes
 
-<h1></h1>
+| Nombre | Rol |
+|--------|-----|
+| Jocelyn Gudiño | Project Manager |
+| Miguel Venegas | Data Scientist |
+| Jonathan Gutiérrez | Data Analyst |
+| Luiggi Juarez | Data Analyst |
+| Manuel Jaliffe | Backend Developer |
+| Camilo González | Backend Developer |
+| Javier Lujan | Backend Developer |
 
-<h3> Información de Proyecto </h3>
+---
+
+## 📌 Información del Proyecto
 
 Profesionales y estudiantes de tecnología consumen diariamente una gran cantidad de contenido técnico, lo que dificulta organizar, localizar y reutilizar esta información posteriormente.
 
-Se requiere crear una solución que permita la organización inteligente de contenido técnico, facilitando su clasificación, consulta y reutilización.
-La solución debe recibir textos técnicos (por ejemplo: descripciones de artículos, documentación, anotaciones de estudio, contenidos de cursos, tutoriales o materiales de referencia) y utilizar técnicas de Ciencia de Datos para identificar información relevante sobre ese contenido.
+TechMind es una solución que permite la **organización inteligente de contenido técnico**, facilitando su clasificación, consulta y reutilización. Recibe textos técnicos (descripciones de artículos, documentación, anotaciones de estudio, tutoriales, etc.) y utiliza modelos de Machine Learning para:
 
-<h1></h1>
+- 🏷️ **Clasificar** el contenido en categorías técnicas (Backend, Frontend, Full Stack, Data Science, DevOps, Mobile)
+- 📊 **Estimar la probabilidad** de la clasificación
+- 🔑 **Extraer palabras clave** relevantes del texto
+- 🌐 **Detectar el lenguaje** de programación o tecnología mencionada
 
-<h3> Arquitectura del proyecto </h3>
+---
 
-La arquitectura del proyecto sigue un flujo descendente:
-Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object Storage, la API REST lo consume para generar predicciones, y la UI permite al usuario interactuar con el sistema.
+## 🏗️ Arquitectura del Proyecto
 
-```bash
+```
 +---------------------------+
 |       Data Science        |
 |  EDA → Limpieza → Modelo  |
@@ -41,26 +46,23 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
               |
               v
 +---------------------------+
-|      Modelo ONNX/Pkl      |
-|   (generado por DS)       |
+|      Modelos ONNX         |
+|  modelo_categoria.onnx    |
+|  modelo_lenguaje.onnx     |
 +-------------+-------------+
               |
               v
 +---------------------------+
-|      OCI Object Storage   |
-|   (modelo.onnx almacenado)|
+|      Backend Java         |
+|  Spring Boot + ONNX RT    |
+|  Puerto 8080              |
 +-------------+-------------+
               |
               v
 +---------------------------+
-|         API REST          |
-|      (FastAPI/Flask)      |
-+-------------+-------------+
-              |
-              v
-+---------------------------+
-|        Interfaz UI        |
-|  (HTML/JS o Streamlit)    |
+|      Frontend Astro       |
+|  (TypeScript + Astro)     |
+|  Puerto 4321              |
 +-------------+-------------+
               |
               v
@@ -68,70 +70,178 @@ Data Science prepara y entrena el modelo, el modelo se almacena en OCI Object St
 |         Usuario           |
 +---------------------------+
 ```
-<h1></h1>
 
-<h3> Herramientas utilizadas </h3>
+---
 
-* **Lenguajes**: Python, Java. 
-* **Frameworks/Backend**: Spring Boot (Framework de Java).
-* **Librerías**: Pandas, Scikit-Learn.
-* **Técnicas de Machine Learning**: TF-IDF(Vectorización de texto).
-* **Herramientas**: Excel, Google Colab, OCI, Docker, Postman, Trello.
+## 🛠️ Herramientas Utilizadas
 
-<h1></h1>
+- **Lenguajes**: Python, Java, TypeScript
+- **Backend**: Spring Boot 3.3 (Java 21)
+- **Frontend**: Astro 7, TypeScript
+- **Machine Learning**: Scikit-Learn, TF-IDF, modelos exportados a ONNX
+- **Base de datos**: PostgreSQL 15
+- **Contenedores**: Docker
+- **Librerías ML**: Pandas, Scikit-Learn, ONNX Runtime
+- **Herramientas**: Google Colab, Railway Cloud, Docker, Postman, Trello
 
-<h3> Estructura de carpetas </h3>
+---
 
-La estructura permite una organización por capas independientes, lo que facilita un flujo claro del proyecto.
+## 📁 Estructura de Carpetas
 
-```bash
-
+```
 G9-LATAM-Team-73/
 │
 ├── data/
 │   ├── raw/               # Dataset original (CSV)
-│   ├── processed/         # Limpieza de Dataset
+│   ├── processed/         # Dataset limpio
 │   └── eda/               # Imágenes y reportes del EDA
 │
-├── notebooks/
-│   ├── 01_eda.ipynb       # Exploración de datos (nombre por actualizar)
-│   ├── 02_cleaning.ipynb  # Limpieza y preparación (nombre por actualizar)
-│   ├── 03_training.ipynb  # Entrenamiento del modelo (nombre por actualizar)
-│   └── 04_export_model.ipynb # Exportación a pkl/onnx (nombre por actualizar)
+├── notebook/
+│   └── *.ipynb            # Notebooks de exploración, limpieza y entrenamiento
 │
 ├── model/
-│   ├── modelo.pkl         # Modelo para pruebas locales (nombre por actualizar)
-│   └── modelo.onnx        # Modelo para backend en producción (nombre por actualizar)
+│   ├── modelo_categoria.onnx   # Modelo de clasificación por categoría
+│   ├── mapa_categoria.json     # Mapeo de labels del modelo de categoría
+│   ├── modelo_lenguaje.onnx    # Modelo de clasificación por lenguaje/tecnología
+│   └── mapa_lenguaje.json      # Mapeo de labels del modelo de lenguaje
 │
-├── api/
-│   ├── main.py            # API REST (FastAPI) (nombre por actualizar)
-│   ├── requirements.txt   # Dependencias del backend (nombre por actualizar)
-│   └── utils/             # Funciones auxiliares
+├── backend/
+│   ├── src/               # Código fuente Spring Boot
+│   ├── docker-compose.yml # Configuración Docker del backend
+│   ├── Dockerfile         # Imagen Docker del backend
+│   └── pom.xml            # Dependencias Maven
 │
 ├── ui/
-│   ├── index.html         # Interfaz web (nombre por actualizar)
-│   ├── script.js          # Lógica del frontend (nombre por actualizar)
-│   └── styles.css         # Estilos (nombre por actualizar)
+│   └── frontend/          # Aplicación Astro (TypeScript)
+│       ├── src/           # Componentes y páginas
+│       ├── public/        # Recursos estáticos
+│       └── package.json   # Dependencias npm
 │
-├── oci/
-│   ├── architecture.png   # Diagrama de arquitectura (nombre por actualizar)
-│   └── deployment.md      # Guía de despliegue en OCI (nombre por actualizar)
+├── railway/
+│   └── deployment.md      # Guía de despliegue en OCI
 │
-└── README.md              # Documentación del proyecto.
+└── README.md
 ```
 
-<h1></h1>
+---
 
-<h3> Ejecución del proyecto </h3>
+## ⚙️ Requisitos Previos
 
-<h1></h1>
+Antes de correr el proyecto, asegúrate de tener instalado:
 
-<h3> Ejemplos de uso </h3>
+- [Java 21](https://www.oracle.com/java/technologies/downloads/#java21)
+- [Maven 3.9+](https://maven.apache.org/download.cgi)
+- [Node.js 18+](https://nodejs.org/)
+- [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
-<h1></h1>
+---
 
-<h3> Despliegue en OCI </h3>
+## 🚀 Ejecución del Proyecto (Local)
 
-<h1></h1>
+### 1. Clonar el repositorio
 
-<h3> Licencias </h3>
+```bash
+git clone https://github.com/tu-org/G9-LATAM-Team-73.git
+cd G9-LATAM-Team-73
+```
+
+### 2. Levantar la base de datos PostgreSQL
+
+```bash
+docker run -d \
+  --name techmind-postgres \
+  -e POSTGRES_DB=techmind \
+  -e POSTGRES_USER=techmind \
+  -e POSTGRES_PASSWORD=techmind \
+  -p 5432:5432 \
+  postgres:15
+```
+
+### 3. Levantar el Backend
+
+```bash
+cd backend
+mvn clean package -DskipTests
+mvn spring-boot:run
+```
+
+El backend quedará disponible en: `http://localhost:8080`
+
+### 4. Levantar el Frontend
+
+Abre una nueva terminal:
+
+```bash
+cd ui/frontend
+echo PUBLIC_API_URL=http://localhost:8080 > .env
+npm install
+npm run dev
+```
+
+El frontend quedará disponible en: `http://localhost:4321`
+
+> **Nota Windows:** Si npm no ejecuta por políticas de PowerShell, corre primero:
+> ```powershell
+> Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+> ```
+
+---
+
+## 📡 Endpoints del API
+
+### `POST /api/classify`
+
+Clasifica un texto técnico.
+
+**Request:**
+```json
+{
+  "title": "Configuración de Spring Boot con PostgreSQL",
+  "text": "En este tutorial aprenderemos a conectar Spring Boot con una base de datos PostgreSQL usando JPA e Hibernate."
+}
+```
+
+**Response:**
+```json
+{
+  "category": "Backend",
+  "probability": 0.92,
+  "tags": ["spring", "java", "postgresql", "jpa"],
+  "source": "onnx"
+}
+```
+
+---
+
+## 💡 Ejemplos de Uso
+
+| Título | Descripción | Categoría esperada |
+|--------|-------------|-------------------|
+| React Hooks Tutorial | Uso de useState y useEffect en React | Frontend |
+| Docker y Kubernetes | Despliegue de contenedores con CI/CD | DevOps |
+| Flutter para Android | Desarrollo de apps móviles con Dart | Mobile |
+| Modelo de clasificación con Scikit-Learn | Entrenamiento con TF-IDF | Data Science |
+
+---
+
+## 🌐 Despliegue en OCI / Railway
+
+El proyecto está preparado para desplegarse en la nube. Ver [`railway/deployment.md`](railway/deployment.md) para instrucciones detalladas.
+
+Variables de entorno requeridas en producción:
+
+| Variable | Descripción |
+|----------|-------------|
+| `DB_URL` | URL JDBC de PostgreSQL |
+| `DB_USERNAME` | Usuario de la base de datos |
+| `DB_PASSWORD` | Contraseña de la base de datos |
+| `TECHMIND_ML_FALLBACK_ENABLED` | Activar clasificador por palabras clave si no hay modelo |
+| `TECHMIND_CORS_ALLOWED_ORIGINS` | Origen permitido del frontend |
+
+---
+
+## 📄 Licencia
+
+Este proyecto fue desarrollado como parte del **Hackathon ONE - LATAM 2026**.  
+Todos los derechos reservados al Equipo 73.
+

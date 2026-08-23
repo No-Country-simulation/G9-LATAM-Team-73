@@ -61,13 +61,18 @@ document.getElementById("btnEnviar").addEventListener("click", async () => {
             (data.probabilidad * 100).toFixed(2) + "%";
 
         const lista = document.getElementById("infoAdicional");
+        const infoWrapper = document.getElementById("infoAdicionalWrapper");
         lista.innerHTML = "";
 
-        data.informacionAdicional.forEach(item => {
+        const informacionAdicional = Array.isArray(data.informacionAdicional) ? data.informacionAdicional : [];
+
+        informacionAdicional.forEach(item => {
             const li = document.createElement("li");
             li.textContent = item;
             lista.appendChild(li);
         });
+
+        infoWrapper.classList.toggle("oculto", informacionAdicional.length === 0);
 
         document.getElementById("resultado").classList.remove("oculto");
 
