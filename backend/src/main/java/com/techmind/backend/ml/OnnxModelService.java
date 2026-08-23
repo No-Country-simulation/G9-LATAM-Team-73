@@ -109,12 +109,12 @@ public class OnnxModelService {
     }
 
     /**
-     * Predice categoría, probabilidad y tags a partir de título + texto.
+     * Predice categorÃƒÆ’Ã‚Â­a, probabilidad y tags a partir de tÃƒÆ’Ã‚Â­tulo + texto.
      */
     public PredictionResult predict(String title, String text) {
         String cleaned = textPreprocessor.combineAndClean(title, text);
         if (cleaned.isBlank()) {
-            throw new IllegalArgumentException("El texto a clasificar está vacío tras el preprocesamiento.");
+            throw new IllegalArgumentException("El texto a clasificar estÃƒÆ’Ã‚Â¡ vacÃƒÆ’Ã‚Â­o tras el preprocesamiento.");
         }
 
         List<String> tags = keywordExtractor.extract(cleaned);
@@ -146,7 +146,7 @@ public class OnnxModelService {
 
             List<String> finalTags = new ArrayList<>(extractedTags);
 
-            // Inferir lenguaje con modelo_lenguaje.onnx si está disponible
+            // Inferir lenguaje con modelo_lenguaje.onnx si estÃƒÆ’Ã‚Â¡ disponible
             if (languageSession != null) {
                 try (OnnxTensor langTensor = OnnxTensor.createTensor(environment, inputData)) {
                     Map<String, OnnxTensor> inputs = Map.of("input", langTensor);
@@ -245,13 +245,13 @@ public class OnnxModelService {
                 Object first = list.get(0);
                 if (first instanceof OnnxMap map) {
                     try {
-                        Object mapVal = map.getValue();
-                        if (mapVal instanceof Map<?, ?> m) {
+                        Object mapVal = map.getValue(); log.info("[DIAGNOSTICO] mapVal tipo: {}", mapVal == null ? "null" : mapVal.getClass().getName());
+                        if (mapVal instanceof Map<?, ?> m) { for (Map.Entry<?, ?> me : m.entrySet()) { log.info("[DIAGNOSTICO] llave={} (tipo {}) valor={}", me.getKey(), me.getKey().getClass().getName(), me.getValue()); }
                             Object probObj = m.get(labelId);
                             if (probObj == null) {
                                 probObj = m.get(String.valueOf(labelId));
                             }
-                            if (probObj instanceof Number number) {
+                            log.info("[DIAGNOSTICO] probObj final: {} para labelId={}", probObj, labelId); if (probObj instanceof Number number) {
                                 return clamp(number.doubleValue());
                             }
                         }
