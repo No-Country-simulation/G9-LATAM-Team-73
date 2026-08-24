@@ -16,7 +16,6 @@
 | Jocelyn Gudiño | Project Manager |
 | Miguel Venegas | Data Scientist |
 | Jonathan Gutiérrez | Data Analyst |
-| Luiggi Juarez | Data Analyst |
 | Manuel Jaliffe | Backend Developer |
 | Camilo González | Backend Developer |
 | Javier Lujan | Backend Developer |
@@ -118,7 +117,7 @@ G9-LATAM-Team-73/
 │       └── package.json   # Dependencias npm
 │
 ├── railway/
-│   └── deployment.md      # Guía de despliegue en OCI
+│   └── deployment.md      # Guía de despliegue Railway Cloud 
 │
 └── README.md
 ```
