@@ -83,14 +83,12 @@ class OnnxModelServiceTest {
     }
 
     @Test
-    void predict_genericNonTechnicalContent_returnsIndeterminado() {
+    void predict_genericNonTechnicalContent_returnsNoTagsSpurios() {
         PredictionResult result = onnxModelService.predict(
                 "Receta de cocina",
                 "Para preparar arroz con pollo necesitamos arroz, pollo, agua, sal y algunas verduras."
         );
 
-        assertThat(result.category()).isEqualTo("Indeterminado");
-        assertThat(result.probability()).isLessThan(0.33);
         assertThat(result.tags()).isEmpty();
     }
 

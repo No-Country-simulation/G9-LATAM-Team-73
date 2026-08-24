@@ -34,6 +34,7 @@ import java.util.Map;
 @Service
 public class OnnxModelService {
 
+    private static final double UMBRAL_CONFIANZA_LENGUAJE = 0.33;
 
     private final MlProperties mlProperties;
     private final TextPreprocessor textPreprocessor;
@@ -138,7 +139,7 @@ public class OnnxModelService {
             try (OnnxTensor inputTensor = OnnxTensor.createTensor(environment, inputData)) {
                 Map<String, OnnxTensor> inputs = Map.of("input", inputTensor);
                 try (OrtSession.Result result = categorySession.run(inputs)) {
-                    catLabelId = extractLabelId(result);
+                    catLabelId = extractLabelId(result, "categoria");
                     categoryRaw = categoryMap.getOrDefault(catLabelId, "backend");
                     categoryProb = extractProbability(result, catLabelId);
                 }
@@ -151,9 +152,12 @@ public class OnnxModelService {
                 try (OnnxTensor langTensor = OnnxTensor.createTensor(environment, inputData)) {
                     Map<String, OnnxTensor> inputs = Map.of("input", langTensor);
                     try (OrtSession.Result langResult = languageSession.run(inputs)) {
-                        long langLabelId = extractLabelId(langResult);
+                        long langLabelId = extractLabelId(langResult, "lenguaje");
+                        double langProb = extractProbability(langResult, langLabelId);
                         String langPredicted = languageMap.get(langLabelId);
-                        if (langPredicted != null && !langPredicted.isBlank()) {
+                        if (langPredicted != null && !langPredicted.isBlank()
+                                && !langPredicted.equalsIgnoreCase("N/A")
+                                && langProb >= UMBRAL_CONFIANZA_LENGUAJE) {
                             boolean containsLang = finalTags.stream()
                                     .anyMatch(t -> t.equalsIgnoreCase(langPredicted));
                             if (!containsLang) {
@@ -215,7 +219,7 @@ public class OnnxModelService {
         return total;
     }
 
-    private long extractLabelId(OrtSession.Result result) throws OrtException {
+    private long extractLabelId(OrtSession.Result result, String modelName) throws OrtException {
         for (Map.Entry<String, ? extends OnnxValue> entry : result) {
             Object value = entry.getValue().getValue();
             if (value instanceof long[] ids && ids.length > 0) {
@@ -231,6 +235,7 @@ public class OnnxModelService {
                 }
             }
         }
+        log.warn("No se pudo extraer labelId reconocible de la salida ONNX del modelo '{}'. Usando fallback labelId=0.", modelName);
         return 0;
     }
 
@@ -245,13 +250,13 @@ public class OnnxModelService {
                 Object first = list.get(0);
                 if (first instanceof OnnxMap map) {
                     try {
-                        Object mapVal = map.getValue(); log.info("[DIAGNOSTICO] mapVal tipo: {}", mapVal == null ? "null" : mapVal.getClass().getName());
-                        if (mapVal instanceof Map<?, ?> m) { for (Map.Entry<?, ?> me : m.entrySet()) { log.info("[DIAGNOSTICO] llave={} (tipo {}) valor={}", me.getKey(), me.getKey().getClass().getName(), me.getValue()); }
+                        Object mapVal = map.getValue();
+                        if (mapVal instanceof Map<?, ?> m) {
                             Object probObj = m.get(labelId);
                             if (probObj == null) {
                                 probObj = m.get(String.valueOf(labelId));
                             }
-                            log.info("[DIAGNOSTICO] probObj final: {} para labelId={}", probObj, labelId); if (probObj instanceof Number number) {
+                            if (probObj instanceof Number number) {
                                 return clamp(number.doubleValue());
                             }
                         }
@@ -292,6 +297,7 @@ public class OnnxModelService {
             case "data science", "datascience", "ciencia de datos" -> "Data Science";
             case "devops" -> "DevOps";
             case "mobile" -> "Mobile";
+            case "no tecnico", "no técnico" -> "No Técnico";
             default -> Character.toUpperCase(category.charAt(0)) + category.substring(1);
         };
     }
