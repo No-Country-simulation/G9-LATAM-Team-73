@@ -1,0 +1,10 @@
+﻿# Fuerza a Git a tratar estos archivos como binarios puros,
+# sin conversion de saltos de linea (LF/CRLF). Sin esto, un modelo
+# .onnx puede corromperse al clonar en distintas configuraciones de Git,
+# causando que la app caiga al clasificador de respaldo sin aviso.
+*.onnx binary
+*.pkl binary
+*.h5 binary
+*.png binary
+*.jpg binary
+*.jpeg binary
